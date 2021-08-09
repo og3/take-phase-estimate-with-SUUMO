@@ -1,0 +1,33 @@
+.container
+  h2 物件名：#{@result[:room_name]}
+br
+.container
+  = form_tag send_aimitumori_path, class: "form" do
+    = hidden_field_tag :url, @result[:url]
+    h2 見積もり依頼を出す店舗一覧
+    br
+    p チッェクが入っている店舗に対して問い合わせを行います。
+    ul
+      - @result[:shop_list].each do |shop_name|
+        li
+          = check_box "shop_list", shop_name, {:checked => "checked"}
+          = shop_name
+    .container
+      h2 問い合わせフォーム
+      .row
+        p 見積もり依頼文(必須)
+        = text_area_tag :inquiry, "当物件について初期費用が知りたいです。お手数ですが初期費用の項目一覧と金額を教えていただけますでしょうか？また各項目につきまして、支払いが「必須なもの」と「任意のもの」がわかるように表記してください。", placeholder: "100文字以内で入力してください。", maxlength: "100"
+      .row
+        p お名前(必須)
+        = text_field_tag :name, "", placeholder: "例) 田中 太郎"
+      .row
+        p メールアドレス(必須)
+        = text_field_tag :mail, "", placeholder: "例) suumo@xxxxxx.co.jp"
+      .row
+        p 電話番号(任意)
+        = text_field_tag :phone, "", placeholder: "例) 09012345678"
+      br
+      .row
+        = submit_tag "見積もりを依頼する", type: 'button', onclick: 'submit();', data: { confirm: "選択された店舗に対して、入力された内容の見積もり依頼を送信します。なお、この操作は取り消せません。送信してよろしいですか？" }, class: "btn btn-primary"
+      br
+

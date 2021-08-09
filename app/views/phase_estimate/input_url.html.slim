@@ -1,0 +1,7 @@
+/ TODO: URLが無効だった場合にフラッシュメッセージを出す
+.container
+  .row.height.d-flex.justify-content-center.align-items-center
+    .col-md-6
+      = form_tag check_url_path, class: "form" do
+        i.fa.fa-search
+        = text_field_tag :url, '', class:"form-control form-input", placeholder: "相見積もりを取りたいSUUMO掲載物件のURLを入力してください"

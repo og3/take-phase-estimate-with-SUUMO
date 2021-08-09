@@ -1,0 +1,15 @@
+doctype html
+html
+  head
+    title
+      | SUUMO掲載賃貸物件の相見積もりが取れるサイト
+    meta[name="viewport" content="width=device-width,initial-scale=1"]
+    = csrf_meta_tags
+    = csp_meta_tag
+    = stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload'
+    = javascript_pack_tag 'application', 'data-turbolinks-track': 'reload'
+  body
+    - if flash[:alert]
+      .alert
+        = flash[:alert]
+    = yield
