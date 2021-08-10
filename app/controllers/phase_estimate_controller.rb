@@ -15,7 +15,6 @@ class PhaseEstimateController < ApplicationController
     redirect_to input_url_path, alert: "本物件は取扱店舗が1件しかないため相見積もりは取れません" and return unless browser_operation.able_to_aimitu?
 
     @@result_hash[:room_name] = browser_operation.find_room_name
-    # 問い合わせボタンのxpathも取る
     @@result_hash[:shop_list] = browser_operation.get_shop_list
     @@result_hash[:url] = params[:url]
 
@@ -32,7 +31,9 @@ class PhaseEstimateController < ApplicationController
   # 相見積もりを送る
   def send_aimitumori
     check_aimitumori_params(params)
+    SendAimitumoriJob.perform_later(params.permit!)
 
+    redirect_to success_send_aimitumori_path
   end
 
   def success_send_aimitumori

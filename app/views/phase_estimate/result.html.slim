@@ -25,7 +25,7 @@ br
         = text_field_tag :mail, "", placeholder: "例) suumo@xxxxxx.co.jp"
       .row
         p 電話番号(任意)
-        = text_field_tag :phone, "", placeholder: "例) 09012345678"
+        = text_field_tag :phone, "", maxlength: "11", placeholder: "例) 09012345678"
       br
       .row
         = submit_tag "見積もりを依頼する", type: 'button', onclick: 'submit();', data: { confirm: "選択された店舗に対して、入力された内容の見積もり依頼を送信します。なお、この操作は取り消せません。送信してよろしいですか？" }, class: "btn btn-primary"
