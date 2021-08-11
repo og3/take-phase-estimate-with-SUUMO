@@ -1,7 +1,13 @@
-/ TODO: URLが無効だった場合にフラッシュメッセージを出す
+= render partial: "header"
 .container
-  .row.height.d-flex.justify-content-center.align-items-center
+  br
+  br
+  br
+  br
+  .container.text-center.mt-5.mb-5
+    h1.mb-4 見積もり依頼を一括で
+    p ~SUUMOに掲載されている賃貸物件の初期費用見積もり依頼が一括で出せるサイト~
+  .row.height.d-flex.justify-content-center.align-items-center.mb-5
     .col-md-6
       = form_tag check_url_path, class: "form" do
-        i.fa.fa-search
-        = text_field_tag :url, '', class:"form-control form-input", placeholder: "相見積もりを取りたいSUUMO掲載物件のURLを入力してください"
+        = text_field_tag :url, '', class:"form-control form-input", placeholder: "SUUMO掲載物件のURLを入力してください"
