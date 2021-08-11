@@ -5,9 +5,6 @@ class BrowserOperation
   SLEEP_TIME = 2
   SLEEP_TIME_OF_WAIT_FOR_PAGE_LOAD = 5
 
-  def initialize
-  end
-
   def valid_suumo_url?(url)
     @driver.get(url)
 
@@ -88,7 +85,7 @@ class BrowserOperation
     # 確認ページが表示されるまで待つ
     sleep SLEEP_TIME_OF_WAIT_FOR_PAGE_LOAD
     # フォームを送信する
-    # submit_form
+    submit_form
   end
 
   def get_to(url)
