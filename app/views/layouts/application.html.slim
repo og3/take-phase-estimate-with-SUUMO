@@ -10,6 +10,6 @@ html
     = javascript_pack_tag 'application', 'data-turbolinks-track': 'reload'
   body
     - if flash[:alert]
-      .alert
+      .alert.alert-danger.text-center
         = flash[:alert]
     = yield
