@@ -1,4 +1,5 @@
 class PhaseEstimateController < ApplicationController
+  before_action :authenticate_user!, only: [:check_url, :send_aimitumori, :result]
 
   @@result_hash = {}
 
@@ -6,6 +7,7 @@ class PhaseEstimateController < ApplicationController
   end
 
   def check_url
+    # redirect_to input_url_path, alert: "サイトの利用にはログインが必要です。" and return if authenticate_user!
     redirect_to input_url_path, alert: "SUUMOの賃貸物件ページのURLではありません。" and return unless params[:url].include?("https://suumo.jp/chintai")
 
     browser_operation = BrowserOperation.new
