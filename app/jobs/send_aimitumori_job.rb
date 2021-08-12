@@ -1,5 +1,8 @@
 class SendAimitumoriJob < ApplicationJob
   queue_as :default
+  # エラーが出たらリトライさせない
+  discard_on Selenium::WebDriver::Error::NoSuchWindowError
+  discard_on Selenium::WebDriver::Error::ElementNotInteractableError
 
   def perform(params, user)
     target_shop_datas = target_shop_datas(params[:shop_list])
@@ -13,7 +16,7 @@ class SendAimitumoriJob < ApplicationJob
       next if target_shop_data[:send_flag] == "0"
       browser_operation.get_to_form_page(target_shop_data[:index]) unless target_shop_data[:index] == 0
 
-      browser_operation.send_form(params[:inquiry], params[:name], params[:mail], params[:phone], target_shop_data[:index])
+      browser_operation.send_form(params[:inquiry], params[:name], params[:mail], params[:phone])
       browser_operation.get_to(params[:url])
     end
 
