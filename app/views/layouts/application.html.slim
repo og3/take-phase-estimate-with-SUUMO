@@ -12,4 +12,7 @@ html
     - if flash[:alert]
       .alert.alert-danger.text-center
         = flash[:alert]
+    - elsif flash[:notice]
+      .alert.alert-success.text-center
+        = flash[:notice]
     = yield

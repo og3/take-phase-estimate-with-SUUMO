@@ -4,6 +4,7 @@ br
 .container
   = form_tag send_aimitumori_path, class: "form" do
     = hidden_field_tag :url, @result[:url]
+    = hidden_field_tag :room_name, @result[:room_name]
     h2 見積もり依頼を出す店舗一覧
     br
     p チッェクが入っている店舗に対して問い合わせを行います。

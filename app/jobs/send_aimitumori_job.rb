@@ -1,8 +1,9 @@
 class SendAimitumoriJob < ApplicationJob
   queue_as :default
 
-  def perform(params)
+  def perform(params, user)
     target_shop_datas = target_shop_datas(params[:shop_list])
+    aimitumori_log = user.aimitumori_logs.find{|log| log.url == params[:url]}
 
     browser_operation = BrowserOperation.new
     browser_operation.starting_headless_chrome
@@ -17,6 +18,7 @@ class SendAimitumoriJob < ApplicationJob
     end
 
     browser_operation.quit_driver
+    aimitumori_log.update(status: true)
   end
 
   private

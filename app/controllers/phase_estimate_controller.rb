@@ -32,13 +32,13 @@ class PhaseEstimateController < ApplicationController
 
   # 相見積もりを送る
   def send_aimitumori
+    redirect_to input_url_path, alert: "同じ物件への見積もり依頼の一括送信は1度のみ可能です。" and return if sent_before?(current_user, params[:url])
+
     check_aimitumori_params(params)
-    SendAimitumoriJob.perform_later(params.permit!)
+    create_aimitumori_log(current_user.id, params)
+    SendAimitumoriJob.perform_later(params.permit!, current_user)
 
-    redirect_to success_send_aimitumori_path
-  end
-
-  def success_send_aimitumori
+    redirect_to input_url_path, notice: "見積もり依頼の送信を受け付けました。「マイページ」にて進捗状況が確認できます。"
   end
 
   private
@@ -61,4 +61,11 @@ class PhaseEstimateController < ApplicationController
     end
   end
 
+  def sent_before?(user, url)
+    user.aimitumori_logs.select{|log| log.url == url}.present?
+  end
+
+  def create_aimitumori_log(user_id, params)
+    AimitumoriLog.create(user_id: user_id, bukken_name: params[:room_name], url: params[:url], shop_names: params[:shop_list])
+  end
 end
