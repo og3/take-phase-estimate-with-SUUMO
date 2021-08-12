@@ -1,0 +1,20 @@
+= render partial: "phase_estimate/header"
+.container
+  h2 利用ログ
+  table.table.table-striped
+    thead
+      tr
+        th 物件名
+        th 物件url
+        th 送信した店舗
+        th 見積もり依頼送信完了
+        th 見積もり送信時刻
+    br
+    tbody
+      - @aimitumori_logs.each do |log|
+        tr
+          td = log.bukken_name
+          td = log.url
+          td = log.shop_names
+          td = log.status
+          td = log.created_at

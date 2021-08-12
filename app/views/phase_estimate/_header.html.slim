@@ -7,6 +7,9 @@ nav.navbar.navbar-expand-sm.mt-1.mb-3
         = link_to "お問い合わせ", "https://docs.google.com/forms/d/1Fl83yBeU0vVXVTtAp93DCFg3FVaN47mnO7dgUpp-Uuc", class: "nav-link"
       li.nav-item
         - if user_signed_in?
-          = link_to "マイページ", "", class: "nav-link"
+          = link_to "マイページ", user_path(current_user.id), class: "nav-link"
         - else
           = link_to "ログイン", new_user_session_path, class: "nav-link"
+      li.nav-item
+        - if user_signed_in?
+          = link_to "ログアウト", destroy_user_session_path, class: "nav-link"

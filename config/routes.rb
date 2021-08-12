@@ -8,4 +8,6 @@ Rails.application.routes.draw do
   post "/send_aimitumori" => "phase_estimate#send_aimitumori"
   get "/result" => "phase_estimate#result"
   get "/success_send_aimitumori" => "phase_estimate#success_send_aimitumori"
+
+  resources :users, only: [:show]
 end
