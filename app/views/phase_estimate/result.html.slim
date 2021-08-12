@@ -23,7 +23,7 @@ br
         = text_field_tag :name, "", placeholder: "例) 田中 太郎"
       .row
         p メールアドレス(必須)
-        = text_field_tag :mail, "", placeholder: "例) suumo@xxxxxx.co.jp"
+        = text_field_tag :mail, current_user.email, readonly: true
       .row
         p 電話番号(任意)
         = text_field_tag :phone, "", maxlength: "11", placeholder: "例) 09012345678"
