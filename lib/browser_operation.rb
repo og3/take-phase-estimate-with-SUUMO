@@ -1,6 +1,6 @@
 class BrowserOperation
   require 'selenium-webdriver'
-  require 'webdrivers'
+  # require 'webdrivers'
 
   SLEEP_TIME = 5
 
