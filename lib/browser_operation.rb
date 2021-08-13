@@ -2,8 +2,7 @@ class BrowserOperation
   require 'selenium-webdriver'
   require 'webdrivers'
 
-  SLEEP_TIME = 2
-  SLEEP_TIME_OF_WAIT_FOR_PAGE_LOAD = 5
+  SLEEP_TIME = 5
 
   def valid_suumo_url?(url)
     @driver.get(url)
@@ -27,8 +26,12 @@ class BrowserOperation
     else
       options = Selenium::WebDriver::Chrome::Options.new
     end
-    # TODO:デバッグモードで起動したら通常モードで起動するようにしたい。
+    # heroku上でのメモリ不足対策
     options.add_argument('--headless')
+    options.add_argument('--disable-gpu')
+    options.add_argument('--no-sandbox')
+    options.add_argument('--disable-dev-shm-usage')
+    options.add_argument('--remote-debugging-port=9222')
     # options.add_argument('window-size=500,500')
     @driver = Selenium::WebDriver.for :chrome, options: options
   end
@@ -57,8 +60,11 @@ class BrowserOperation
   end
 
   # フォームに情報を入力し、送信する
-  def send_form(inquiry, name, mail, phone = nil, target_shop_index)
+  def send_form(inquiry, name, mail, phone = nil)
     sleep SLEEP_TIME
+    reload_if_apper_modal
+    sleep SLEEP_TIME
+    @driver.find_element(:id, 'item_name_03').location_once_scrolled_into_view
     # その他の問い合わせ（※詳細記入必須）を選択する
     @driver.find_element(:id, 'item_name_03').click
     # フォームが出るまで待機する
@@ -77,13 +83,13 @@ class BrowserOperation
     # 電話番号を入力する
     @driver.find_element(:name, 'telNo').send_keys(phone) unless phone.nil? || phone.blank?
     # 不要なチェックボックスを解除する
-    ['auto_reflection', 'morelist_item_02', 'morelist_item_03'].each do |element_id|
-      unclick_unnecessary_checks(element_id, target_shop_index)
+    ['auto_reflection', 'morelist_item_01', 'morelist_item_02', 'morelist_item_03'].each do |element_id|
+      unclick_unnecessary_checks(element_id)
     end
     # フォーム送信確認画面に遷移する
     @driver.find_element(:class, 'action_inquiry-item').click
     # 確認ページが表示されるまで待つ
-    sleep SLEEP_TIME_OF_WAIT_FOR_PAGE_LOAD
+    sleep SLEEP_TIME
     # フォームを送信する
     submit_form
   end
@@ -92,14 +98,11 @@ class BrowserOperation
     @driver.get(url)
   end
 
-  def unclick_unnecessary_checks(element_id, target_shop_index)
+  def unclick_unnecessary_checks(element_id)
     sleep SLEEP_TIME
-    # ボタンが見えるところまでスクロールする
-    if target_shop_index == 0
-      # TOP店舗のチェックボックスはページの中心くらいにある
-      @driver.execute_script('window.scroll(0,4800);')
-    else
-      @driver.execute_script('window.scroll(0,1000000);')
+    begin @driver.find_element(:id, element_id).location_once_scrolled_into_view
+    rescue
+      p "#{element_id}:存在せず"
     end
     sleep SLEEP_TIME
     begin @driver.find_element(:id, element_id).click
@@ -117,5 +120,12 @@ class BrowserOperation
     @driver.execute_script('window.scroll(0,1000000);')
     sleep SLEEP_TIME
     @driver.find_element(:class, 'actionunit-submit-btn').send_keys(:enter)
+  end
+
+  def reload_if_apper_modal
+    begin @driver.find_element(:class, '_karte-temp-close__28MX_').click
+    rescue
+      p "modalなし"
+    end
   end
 end
