@@ -68,8 +68,7 @@ Rails.application.configure do
   config.action_mailer.perform_caching = false
 
   # 認証メールの送信設定
-  # default url
-  config.action_mailer.default_url_options = {  host: 'localhost', port: 3000 }
+  config.action_mailer.default_url_options = { host: ENV['HEROKU_HOST_NAME'] }
   # mail setting
   config.action_mailer.raise_delivery_errors = true
   config.action_mailer.delivery_method = :smtp
