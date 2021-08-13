@@ -1,5 +1,7 @@
-nav.navbar.navbar-expand-sm.mt-1.mb-3
-  .collapse.navbar-collapse.justify-content-end
+nav.navbar.navbar-light.bg-white.navbar-expand-sm.mt-1.mb-3
+  button.navbar-toggler[type="button" data-toggle="collapse" data-target="#navmenu1" aria-controls="navmenu1" aria-expanded="false" aria-label="Toggle navigation"]
+    span.navbar-toggler-icon
+  div.collapse.navbar-collapse#navmenu1.justify-content-end
     ul.navbar-nav
       li.nav-item
         = link_to "top", root_path, class: "nav-link"
