@@ -36,9 +36,9 @@ class PhaseEstimateController < ApplicationController
 
     check_aimitumori_params(params)
     create_aimitumori_log(params)
-    # SendAimitumoriJob.perform_later(params.permit!, @email)
+    SendAimitumoriJob.perform_later(params.permit!, @email)
 
-    redirect_to root_path, notice: "見積もり依頼の送信を受け付けました。"
+    redirect_to root_path, notice: "見積もり依頼の送信を受け付けました。店舗からの返信をお待ちください。"
   end
 
   private
