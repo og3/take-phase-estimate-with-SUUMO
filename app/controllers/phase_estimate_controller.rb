@@ -7,13 +7,13 @@ class PhaseEstimateController < ApplicationController
   end
 
   def check_url
-    redirect_to input_url_path, alert: "SUUMOの賃貸物件ページのURLではありません。" and return unless params[:url].include?("https://suumo.jp/chintai")
+    redirect_to root_path, alert: "SUUMOの賃貸物件ページのURLではありません。" and return unless params[:url].include?("https://suumo.jp/chintai")
 
     browser_operation = BrowserOperation.new
     browser_operation.starting_headless_chrome
 
-    redirect_to input_url_path, alert: "urlにアクセスできませんでした。" and return unless browser_operation.valid_suumo_url?(params[:url])
-    redirect_to input_url_path, alert: "本物件は取扱店舗が1件しかないため相見積もりは取れません" and return unless browser_operation.able_to_aimitu?
+    redirect_to root_path, alert: "urlにアクセスできませんでした。" and return unless browser_operation.valid_suumo_url?(params[:url])
+    redirect_to root_path, alert: "本物件は取扱店舗が1件しかないため相見積もりは取れません" and return unless browser_operation.able_to_aimitu?
 
     @@result_hash[:room_name] = browser_operation.find_room_name
     @@result_hash[:shop_list] = browser_operation.get_shop_list
@@ -32,13 +32,13 @@ class PhaseEstimateController < ApplicationController
   # 相見積もりを送る
   def send_aimitumori
     find_or_create_email(params[:mail])
-    redirect_to input_url_path, alert: "同じ物件への見積もり依頼の一括送信は1度のみ可能です。" and return if sent_before?(params[:url])
+    redirect_to root_path, alert: "同じ物件への見積もり依頼の一括送信は1度のみ可能です。" and return if sent_before?(params[:url])
 
     check_aimitumori_params(params)
     create_aimitumori_log(params)
-    SendAimitumoriJob.perform_later(params.permit!, @email)
+    # SendAimitumoriJob.perform_later(params.permit!, @email)
 
-    redirect_to input_url_path, notice: "見積もり依頼の送信を受け付けました。"
+    redirect_to root_path, notice: "見積もり依頼の送信を受け付けました。"
   end
 
   private
