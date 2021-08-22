@@ -8,7 +8,6 @@ Rails.application.routes.draw do
   post "/send_aimitumori" => "phase_estimate#send_aimitumori"
   get "/result" => "phase_estimate#result"
 
-  resources :users, only: [:show]
   require 'sidekiq/web'
   authenticate :user do #authenticate
     mount Sidekiq::Web => '/sidekiq'

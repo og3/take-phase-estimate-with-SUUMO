@@ -1,5 +1,4 @@
 class PhaseEstimateController < ApplicationController
-  before_action :authenticate_user!, only: [:check_url, :send_aimitumori, :result]
   skip_before_action :verify_authenticity_token
 
   @@result_hash = {}
@@ -32,13 +31,14 @@ class PhaseEstimateController < ApplicationController
 
   # 相見積もりを送る
   def send_aimitumori
-    redirect_to input_url_path, alert: "同じ物件への見積もり依頼の一括送信は1度のみ可能です。" and return if sent_before?(current_user, params[:url])
+    find_or_create_email(params[:mail])
+    redirect_to input_url_path, alert: "同じ物件への見積もり依頼の一括送信は1度のみ可能です。" and return if sent_before?(params[:url])
 
     check_aimitumori_params(params)
-    create_aimitumori_log(current_user.id, params)
-    SendAimitumoriJob.perform_later(params.permit!, current_user)
+    create_aimitumori_log(params)
+    SendAimitumoriJob.perform_later(params.permit!, @email)
 
-    redirect_to input_url_path, notice: "見積もり依頼の送信を受け付けました。「マイページ」にて進捗状況が確認できます。"
+    redirect_to input_url_path, notice: "見積もり依頼の送信を受け付けました。"
   end
 
   private
@@ -61,11 +61,15 @@ class PhaseEstimateController < ApplicationController
     end
   end
 
-  def sent_before?(user, url)
-    user.aimitumori_logs.select{|log| log.url == url}.present?
+  def find_or_create_email(mail)
+    @email ||= Email.find_or_create_by(email: mail)
   end
 
-  def create_aimitumori_log(user_id, params)
-    AimitumoriLog.create(user_id: user_id, bukken_name: params[:room_name], url: params[:url], shop_names: params[:shop_list])
+  def sent_before?(url)
+    @email.mitumori_logs.select{|log| log.url == url}.present?
+  end
+
+  def create_aimitumori_log(params)
+    MitumoriLog.create(email_id: @email.id, bukken_name: params[:room_name], url: params[:url], shop_names: params[:shop_list])
   end
 end

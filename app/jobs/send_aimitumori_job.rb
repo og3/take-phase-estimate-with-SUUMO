@@ -4,9 +4,9 @@ class SendAimitumoriJob < ApplicationJob
   discard_on Selenium::WebDriver::Error::NoSuchWindowError
   discard_on Selenium::WebDriver::Error::ElementNotInteractableError
 
-  def perform(params, user)
+  def perform(params, email)
     target_shop_datas = target_shop_datas(params[:shop_list])
-    aimitumori_log = user.aimitumori_logs.find{|log| log.url == params[:url]}
+    mitumori_log = email.mitumori_logs.find{|log| log.url == params[:url]}
 
     browser_operation = BrowserOperation.new
     browser_operation.starting_headless_chrome
@@ -21,7 +21,7 @@ class SendAimitumoriJob < ApplicationJob
     end
 
     browser_operation.quit_driver
-    aimitumori_log.update(status: true)
+    mitumori_log.update(status: true)
   end
 
   private
