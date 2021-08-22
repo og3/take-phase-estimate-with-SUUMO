@@ -9,5 +9,8 @@
     p ~SUUMOに掲載されている賃貸物件の初期費用見積もり依頼が一括で出せるサイト~
   .row.height.d-flex.justify-content-center.align-items-center.mb-5
     .col-md-6
-      = form_tag check_url_path, class: "form" do
+      = form_tag check_url_path, remote: true, class: "form" do
         = text_field_tag :url, '', class:"form-control form-input", placeholder: "SUUMO掲載物件のURLを入力してください"
+  .row.height.d-flex.justify-content-center.align-items-center.mb-5
+    .col-md-6.text-center
+      #message
