@@ -3,9 +3,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '2.6.2'
 
-gem 'devise-i18n'
 gem 'dotenv-rails'
-gem 'devise'
 gem "sidekiq"
 gem 'redis-namespace'
 gem 'selenium-webdriver'
