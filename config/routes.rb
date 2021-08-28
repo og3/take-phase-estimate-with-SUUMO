@@ -9,7 +9,5 @@ Rails.application.routes.draw do
   get "/result" => "phase_estimate#result"
 
   require 'sidekiq/web'
-  authenticate :user do #authenticate
-    mount Sidekiq::Web => '/sidekiq'
-  end
+  mount Sidekiq::Web => '/sidekiq'
 end
