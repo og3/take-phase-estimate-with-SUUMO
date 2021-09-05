@@ -23,19 +23,17 @@ class PhaseEstimateController < ApplicationController
     redirect_to result_path
   end
 
-  # URLの結果を確認する
   def result
     @result = @@result_hash
   end
 
-  # 相見積もりを送る
   def send_aimitumori
-    find_or_create_email(params[:mail])
-    redirect_to root_path, alert: '同じ物件への見積もり依頼の一括送信は1度のみ可能です。' and return if sent_before?(params[:url])
+    email = Email.find_or_create_email(params[:mail])
+    redirect_to root_path, alert: '同じ物件への見積もり依頼の一括送信は1度のみ可能です。' and return if email.sent_before?(params[:url])
 
     check_aimitumori_params(params)
-    create_aimitumori_log(params)
-    SendAimitumoriJob.perform_later(params.permit!, @email)
+    MitumoriLog.create_mitumori_log(params, email)
+    SendAimitumoriJob.perform_later(params.permit!, email)
 
     redirect_to root_path, notice: '見積もり依頼の送信を受け付けました。店舗からの返信をお待ちください。'
   end
@@ -52,18 +50,5 @@ class PhaseEstimateController < ApplicationController
     redirect_to result_path, alert: '「問い合わせ内容」は100文字以下で入力してください。' unless params[:inquiry].size <= 100
 
     redirect_to result_path, alert: '「電話番号」の文字数が不正です。' unless params[:phone].size <= 11
-  end
-
-  def find_or_create_email(mail)
-    @email ||= Email.find_or_create_by(email: mail)
-  end
-
-  def sent_before?(url)
-    @email.mitumori_logs.select { |log| log.url == url }.present?
-  end
-
-  def create_aimitumori_log(params)
-    MitumoriLog.create(email_id: @email.id, bukken_name: params[:room_name], url: params[:url],
-                       shop_names: params[:shop_list])
   end
 end
