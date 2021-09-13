@@ -3,6 +3,7 @@ class SendAimitumoriJob < ApplicationJob
   # エラーが出たらリトライさせない
   discard_on Selenium::WebDriver::Error::NoSuchWindowError
   discard_on Selenium::WebDriver::Error::ElementNotInteractableError
+  discard_on Selenium::WebDriver::Error::WebDriverError
 
   def perform(params, email)
     target_shop_datas = target_shop_datas(params[:shop_list])
