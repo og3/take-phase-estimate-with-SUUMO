@@ -6,8 +6,6 @@ class SendAimitumoriJob < ApplicationJob
   discard_on Selenium::WebDriver::Error::WebDriverError
 
   def perform(params, email)
-    # 短期間での実行対策
-    sleep(rand(60..300))
     target_shop_datas = target_shop_datas(params[:shop_list])
     mitumori_log = email.mitumori_logs.find{|log| log.url == params[:url]}
 
