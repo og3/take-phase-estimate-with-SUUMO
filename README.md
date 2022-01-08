@@ -3,6 +3,6 @@
 ```
 # 全て別タブにて
 rails s
-redis server
+redis-server
 bundle exec sidekiq -q default event
 ```
