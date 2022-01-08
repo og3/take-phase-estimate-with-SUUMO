@@ -1,24 +1,8 @@
-# README
-
-This README would normally document whatever steps are necessary to get the
-application up and running.
-
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+## ローカル環境での動作確認方法
+　以下の３つを起動させるとローカル環境でも動作を確認できる。
+```
+# 全て別タブにて
+rails s
+redis server
+bundle exec sidekiq -q default event
+```
