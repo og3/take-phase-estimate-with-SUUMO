@@ -4,5 +4,5 @@
 # 全て別タブにて
 rails s
 redis-server
-bundle exec sidekiq -q default event
+bundle exec sidekiq -q default
 ```
